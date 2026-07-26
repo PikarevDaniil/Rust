@@ -23,11 +23,14 @@ fn main() {
             break;
         }
 
-        println!("{}", fibonacci(input))
+        match fibonacci(input) {
+            Ok(num) => println!("{}", num),
+            Err(last) => println!("Too big number. Last computed: {}", last)
+        }
     }
 }
 
-fn fibonacci(ind: usize) -> usize {
+fn fibonacci(ind: usize) -> Result<usize, usize> {
     let (mut a, mut b): (usize, usize) = (1, 1);
     for _ in 2..ind {
         match a.checked_add(b) {
@@ -35,12 +38,9 @@ fn fibonacci(ind: usize) -> usize {
                 a = b;
                 b = sum
             }
-            None => {
-                println!("Too big number. Last computed:");
-                break;
-            }
+            None => return Err(b),
         }
     }
 
-    return b;
+    Ok(b)
 }
